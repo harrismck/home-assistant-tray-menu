@@ -3,9 +3,10 @@ import React, {
 } from 'react';
 import Icon from '@mdi/react';
 import { useDebouncedCallback } from 'use-debounce';
-import { mdiBrightness6 } from '@mdi/js';
+import { mdiBrightness6, mdiThermometer } from '@mdi/js';
 import { RgbColor, RgbColorPicker } from 'react-colorful';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
+import ThermostatIcon from '@mui/icons-material/Thermostat';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useSettings } from '../../utils/use-settings';
@@ -28,6 +29,7 @@ enum OpenSettingsEnum {
   effect,
   brightness,
   color,
+  colorTemp,
 }
 
 export default function LightElement(props: LightElementProps) {
@@ -36,6 +38,7 @@ export default function LightElement(props: LightElementProps) {
   const { systemAttributes: { computedOsTheme } } = useSettings();
 
   const [color, setColor] = useState<RgbColor>({ r: state.attributes.rgb_color?.[0] ?? 0, g: state.attributes.rgb_color?.[1] ?? 0, b: state.attributes.rgb_color?.[2] ?? 0 });
+  const [colorTemp, setColorTemp] = useState<number>(Math.round(state.attributes.color_temp_kelvin ?? 0));
   const [brightness, setBrightness] = useState<number>(Math.round((state.attributes.brightness ?? 0) / 2.55));
 
   const [openSettings, setOpenSettings] = useState<OpenSettingsEnum | null>(null);
@@ -44,12 +47,26 @@ export default function LightElement(props: LightElementProps) {
   useEffect(() => {
     setColor({ r: state.attributes.rgb_color?.[0] ?? 0, g: state.attributes.rgb_color?.[1] ?? 0, b: state.attributes.rgb_color?.[2] ?? 0 });
     setBrightness(Math.round((state.attributes.brightness ?? 0) / 2.55));
+    setColorTemp(Math.round(state.attributes.color_temp_kelvin ?? 0));
   }, [state]);
 
   // Update height after every render
   useEffect(() => {
     sendHeight();
   }, [openSettings]);
+
+  // Get color temperature as a percentage value.
+  const colorTempPercentage = () => {
+    if (
+      state.attributes.color_temp_kelvin === undefined
+      || state.attributes.min_color_temp_kelvin === undefined
+      || state.attributes.max_color_temp_kelvin === undefined
+    ) {
+      return 0.0;
+    }
+    const tempRange = state.attributes.max_color_temp_kelvin - state.attributes.min_color_temp_kelvin;
+    return 100.0 * ((state.attributes.color_temp_kelvin - state.attributes.min_color_temp_kelvin) / tempRange);
+  };
 
   const debouncedSave = useDebouncedCallback(
     async (newBrightness: number) => {
@@ -65,11 +82,23 @@ export default function LightElement(props: LightElementProps) {
     await refetch();
   }, 500);
 
+  const saveColorTemp = useDebouncedCallback(async (newTemp: number) => {
+    await window.electronAPI.state.callServiceAction('light', 'turn_on', { entity_id: entity.entity_id, color_temp_kelvin: newTemp });
+    await refetch();
+  }, 500);
+
   const onChangeBrightness: ChangeEventHandler<HTMLInputElement> = (event) => {
     const brighness = event.target.valueAsNumber;
 
     setBrightness(brighness);
     debouncedSave(brighness);
+  };
+
+  const onChangeColorTemp: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const colorTempValue = Math.round(event.target.valueAsNumber);
+
+    setColorTemp(colorTempValue);
+    saveColorTemp(colorTempValue);
   };
 
   const onWheel: React.WheelEventHandler = (event) => {
@@ -98,7 +127,16 @@ export default function LightElement(props: LightElementProps) {
 
   const supportedColorModes = state.attributes.supported_color_modes;
 
-  if (supportedColorModes?.includes(ColorModeEnum.RGB) || supportedColorModes?.includes(ColorModeEnum.RGBW) || supportedColorModes?.includes(ColorModeEnum.RGBWW)) {
+  // Lights with colour support.
+  // These always appear to report and accept rgb_colour, regardless of actual mode support.
+  // Colour temperature needs a separate picker and needs to be set using color_temp_kelvin.
+  if (
+    supportedColorModes?.includes(ColorModeEnum.RGB)
+    || supportedColorModes?.includes(ColorModeEnum.RGBW)
+    || supportedColorModes?.includes(ColorModeEnum.RGBWW)
+    || supportedColorModes?.includes(ColorModeEnum.HS)
+    || supportedColorModes?.includes(ColorModeEnum.COLOR_TEMP)
+  ) {
     return (
       <div
         className={clsx({
@@ -162,6 +200,18 @@ export default function LightElement(props: LightElementProps) {
             </button>
           )}
 
+          {state.attributes.color_temp_kelvin !== undefined && (
+            <button
+              className="h-full px-1 text-icon-main hover:text-icon-hover"
+              type="button"
+              onClick={() => {
+                handleSetOpenSettings(OpenSettingsEnum.colorTemp);
+              }}
+            >
+              <ThermostatIcon />
+            </button>
+          )}
+
           {state.attributes.brightness !== undefined && (
             <button
               className="h-full px-1 text-icon-main hover:text-icon-hover"
@@ -179,6 +229,29 @@ export default function LightElement(props: LightElementProps) {
         { openSettings === OpenSettingsEnum.color && (
         <div className="px-3 py-2">
           <RgbColorPicker color={color} onChange={saveColor} className="colorful" />
+        </div>
+        )}
+
+        {openSettings === OpenSettingsEnum.colorTemp && (
+        <div className="px-3 py-2">
+          <div className="flex w-full items-center">
+            <button className="appearance-none pl-2 pr-4" type="button">
+              <Icon path={mdiThermometer} size={0.8} />
+            </button>
+            <div className="custom-slider relative h-[36px] grow">
+              <input
+                className="group h-full w-full appearance-none bg-transparent"
+                type="range"
+                min={state.attributes.min_color_temp_kelvin}
+                max={state.attributes.max_color_temp_kelvin}
+                value={colorTemp}
+                onChange={onChangeColorTemp}
+              />
+              <div className="pointer-events-none absolute top-[calc(50%-1px)] h-[2px] bg-accent-main" style={{ width: `${colorTempPercentage()}%` }} />
+            </div>
+            <h2 className="-mr-1 w-[52px] pl-2 text-center text-xl">{colorTemp}</h2>
+          </div>
+
         </div>
         )}
 
@@ -242,5 +315,6 @@ export default function LightElement(props: LightElementProps) {
     return <div>TODO: implement</div>;
   }
 
+  // TODO: Implement colour temp, hs
   return <div>{`Color mode ${supportedColorModes} not supported`}</div>;
 }

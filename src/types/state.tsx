@@ -26,6 +26,10 @@ export interface LightAttributes {
   supported_color_modes?: ColorModeEnum[]
   supported_features?: number
   xy_color?: [number, number]
+
+  min_color_temp_kelvin?: number
+  max_color_temp_kelvin?: number
+  color_temp_kelvin?: number
 }
 
 export interface SensorAttributes {
