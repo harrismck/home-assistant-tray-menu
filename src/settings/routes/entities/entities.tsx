@@ -31,7 +31,10 @@ export default function Entities() {
       || e.entity_id.startsWith('select.')
        || e.entity_id.startsWith('light.')
         || e.entity_id.startsWith('number.')
-         || e.entity_id.startsWith('climate.')),
+         || e.entity_id.startsWith('climate.')
+          || e.entity_id.startsWith('input_boolean.')
+           || e.entity_id.startsWith('input_select.')
+            || e.entity_id.startsWith('scene.')),
     retry: false,
   });
 

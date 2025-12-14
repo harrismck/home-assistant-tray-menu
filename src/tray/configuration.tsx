@@ -8,6 +8,9 @@ import LightElement from './elements/light-element';
 import SensorElement from './elements/sensor-element';
 import SelectElement from './elements/select-element';
 import ThermostatElement from './elements/thermostat-element';
+import InputBooleanElement from './elements/input-boolean-element';
+import InputSelectElement from './elements/input-select-element';
+import SceneElement from './elements/scene-element';
 import { IEntityConfig } from '../store';
 
 interface ConfigurationProps {
@@ -123,6 +126,39 @@ export default function Configuration(props: ConfigurationProps) {
           if (EntityUtils.isThermostatType(state)) {
             return (
               <ThermostatElement
+                key={entity.entity_id}
+                state={state}
+                entity={entity}
+                refetch={refetch}
+              />
+            );
+          }
+
+          if (EntityUtils.isInputBooleanType(state)) {
+            return (
+              <InputBooleanElement
+                key={entity.entity_id}
+                state={state}
+                entity={entity}
+                refetch={refetch}
+              />
+            );
+          }
+
+          if (EntityUtils.isInputSelectType(state)) {
+            return (
+              <InputSelectElement
+                key={entity.entity_id}
+                state={state}
+                entity={entity}
+                refetch={refetch}
+              />
+            );
+          }
+
+          if (EntityUtils.isSceneType(state)) {
+            return (
+              <SceneElement
                 key={entity.entity_id}
                 state={state}
                 entity={entity}

@@ -72,7 +72,17 @@ export interface ThermostatAttributes {
 
 export type SwitchAttributes = Record<string, never>;
 
-export type CombinedAttributes = LightAttributes | SensorAttributes | NumberAttributes | SelectAttributes | SwitchAttributes | AutomationAttributes | ThermostatAttributes;
+export type InputBooleanAttributes = Record<string, never>;
+
+export interface InputSelectAttributes {
+  options: string[]
+}
+
+export interface SceneAttributes {
+  entity_id?: string[]
+}
+
+export type CombinedAttributes = LightAttributes | SensorAttributes | NumberAttributes | SelectAttributes | SwitchAttributes | AutomationAttributes | ThermostatAttributes | InputBooleanAttributes | InputSelectAttributes | SceneAttributes;
 
 export default interface IState<IAttributes extends CombinedAttributes = CombinedAttributes> {
   entity_id: string

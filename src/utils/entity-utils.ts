@@ -1,5 +1,6 @@
 import IState, {
-  LightAttributes, SelectAttributes, SensorAttributes, SwitchAttributes, ThermostatAttributes,
+  InputBooleanAttributes, InputSelectAttributes, LightAttributes, SceneAttributes,
+  SelectAttributes, SensorAttributes, SwitchAttributes, ThermostatAttributes,
 } from '../types/state';
 import { IEntityConfig } from '../store';
 
@@ -44,5 +45,17 @@ export default class EntityUtils {
 
   public static isThermostatType(state: IState): state is IState<ThermostatAttributes> {
     return state.entity_id.startsWith('climate.');
+  }
+
+  public static isInputBooleanType(state: IState): state is IState<InputBooleanAttributes> {
+    return state.entity_id.startsWith('input_boolean.');
+  }
+
+  public static isInputSelectType(state: IState): state is IState<InputSelectAttributes> {
+    return state.entity_id.startsWith('input_select.');
+  }
+
+  public static isSceneType(state: IState): state is IState<SceneAttributes> {
+    return state.entity_id.startsWith('scene.');
   }
 }
