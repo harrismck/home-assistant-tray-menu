@@ -42,7 +42,7 @@ export default function InputSelectElement(props: InputSelectElementProps) {
         onClick={() => setExpanded(!expanded)}
       >
         <div className="w-10">
-          <ElementIcon iconName={entity.icon || state.attributes.icon} />
+          <ElementIcon iconName={EntityUtils.getIconName(entity, state)} />
         </div>
         <h2 className="flex gap-1">
           {EntityUtils.getEntityName(entity, state)}

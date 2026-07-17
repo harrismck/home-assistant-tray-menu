@@ -20,6 +20,7 @@ export interface ISettings {
     theme: 'system' | 'light' | 'dark'
     osTheme: 'system' | 'win10' | 'win11'
     trayIconColor: 'system' | 'white' | 'black'
+    showSensorLabels: boolean
   }
 }
 
@@ -60,11 +61,15 @@ const schema: JSONSchemaType<SchemaType> = {
               type: 'string',
               default: 'system',
             },
+            showSensorLabels: {
+              type: 'boolean',
+              default: true,
+            },
           },
           default: {
-            theme: 'system', osTheme: 'system', trayIconColor: 'system',
+            theme: 'system', osTheme: 'system', trayIconColor: 'system', showSensorLabels: true,
           },
-          required: ['theme', 'osTheme', 'trayIconColor'],
+          required: ['theme', 'osTheme', 'trayIconColor', 'showSensorLabels'],
         },
         development: {
           type: 'object',
@@ -140,6 +145,7 @@ const store = new Store<SchemaType>({
         theme: 'system',
         osTheme: 'system',
         trayIconColor: 'system',
+        showSensorLabels: true,
       },
     },
   },

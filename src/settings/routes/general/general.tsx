@@ -1,6 +1,6 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import {
-  FormContainer, SelectElement, SubmitHandler, useForm,
+  FormContainer, SelectElement, SubmitHandler, SwitchElement, useForm,
 } from 'react-hook-form-mui';
 import React, {
   useCallback, useEffect, useMemo,
@@ -69,6 +69,10 @@ export default function General() {
             options={[{ id: 'system', label: 'System' }, { id: 'white', label: 'white' }, { id: 'black', label: 'black' }]}
             fullWidth
           />
+        </Grid>
+
+        <Grid xs={12}>
+          <SwitchElement<TFormValues> name="showSensorLabels" label={t('SHOW_SENSOR_LABELS')} />
         </Grid>
 
         <AutoSave

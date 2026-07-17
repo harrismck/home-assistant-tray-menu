@@ -165,7 +165,7 @@ export default function LightElement(props: LightElementProps) {
               await refetch();
             }}
           >
-            <ElementIcon iconName={entity.icon || state.attributes.icon} />
+            <ElementIcon iconName={EntityUtils.getIconName(entity, state)} />
           </button>
 
           <h2>

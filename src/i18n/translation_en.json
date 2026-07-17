@@ -25,6 +25,7 @@
     "TITLE": "General",
     "OPERATING_SYSTEM_THEME": "Operating system theme",
     "OVERWRITE_THEME": "Overwrite theme",
-    "TRAY_ICON_COLOR": "Tray icon color"
+    "TRAY_ICON_COLOR": "Tray icon color",
+    "SHOW_SENSOR_LABELS": "Show sensor labels"
   }
 }

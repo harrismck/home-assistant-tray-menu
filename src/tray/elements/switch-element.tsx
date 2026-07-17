@@ -38,7 +38,7 @@ export default function SwitchElement(props: SwitchElementProps) {
       }}
     >
       <div className="w-10">
-        <ElementIcon iconName={entity.icon || state.attributes.icon} />
+        <ElementIcon iconName={EntityUtils.getIconName(entity, state)} />
       </div>
       <h2>
         {EntityUtils.getEntityName(entity, state)}
