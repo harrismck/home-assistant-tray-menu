@@ -73,6 +73,9 @@ export interface ThermostatAttributes {
 
 export type SwitchAttributes = Record<string, never>;
 
+// Momentary triggers (button / input_button / script) — no attributes we render.
+export type ButtonAttributes = Record<string, never>;
+
 export type InputBooleanAttributes = Record<string, never>;
 
 export interface InputSelectAttributes {
@@ -91,6 +94,7 @@ export type CombinedAttributes =
   | SwitchAttributes
   | AutomationAttributes
   | ThermostatAttributes
+  | ButtonAttributes
   | InputBooleanAttributes
   | InputSelectAttributes
   | SceneAttributes;

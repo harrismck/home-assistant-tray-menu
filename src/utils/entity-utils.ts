@@ -1,6 +1,7 @@
 import IState, {
-  InputBooleanAttributes, InputSelectAttributes, LightAttributes, NumberAttributes,
-  SceneAttributes, SelectAttributes, SensorAttributes, SwitchAttributes, ThermostatAttributes,
+  ButtonAttributes, InputBooleanAttributes, InputSelectAttributes, LightAttributes,
+  NumberAttributes, SceneAttributes, SelectAttributes, SensorAttributes, SwitchAttributes,
+  ThermostatAttributes,
 } from '../types/state';
 import { IEntityConfig } from '../store';
 
@@ -111,6 +112,13 @@ export default class EntityUtils {
 
   public static isNumberType(state: IState): state is IState<NumberAttributes> {
     return state.entity_id.startsWith('number.');
+  }
+
+  // Momentary triggers: button / input_button / script — a single click runs them.
+  public static isTriggerType(state: IState): state is IState<ButtonAttributes> {
+    return state.entity_id.startsWith('button.')
+      || state.entity_id.startsWith('input_button.')
+      || state.entity_id.startsWith('script.');
   }
 
   public static isThermostatType(state: IState): state is IState<ThermostatAttributes> {

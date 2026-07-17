@@ -12,6 +12,7 @@ import ThermostatElement from './elements/thermostat-element';
 import InputBooleanElement from './elements/input-boolean-element';
 import InputSelectElement from './elements/input-select-element';
 import SceneElement from './elements/scene-element';
+import ButtonElement from './elements/button-element';
 import { IEntityConfig } from '../store';
 
 interface ConfigurationProps {
@@ -171,6 +172,17 @@ export default function Configuration(props: ConfigurationProps) {
           if (EntityUtils.isSceneType(state)) {
             return (
               <SceneElement
+                key={entity.entity_id}
+                state={state}
+                entity={entity}
+                refetch={refetch}
+              />
+            );
+          }
+
+          if (EntityUtils.isTriggerType(state)) {
+            return (
+              <ButtonElement
                 key={entity.entity_id}
                 state={state}
                 entity={entity}
