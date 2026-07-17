@@ -45,7 +45,7 @@ export function createTray() {
 
   tray = new Tray(getTrayIconImage());
 
-  tray.setToolTip('Home Assistant Controlls');
+  tray.setToolTip('Home Assistant Controls');
 
   const contextMenu = Menu.buildFromTemplate([
     { label: i18next.t('SETTINGS'), type: 'normal', click: () => openSettings() },

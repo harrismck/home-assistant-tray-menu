@@ -136,6 +136,7 @@ export default function LightElement(props: LightElementProps) {
     || supportedColorModes?.includes(ColorModeEnum.RGBWW)
     || supportedColorModes?.includes(ColorModeEnum.HS)
     || supportedColorModes?.includes(ColorModeEnum.COLOR_TEMP)
+    || supportedColorModes?.includes(ColorModeEnum.BRIGHTNESS)
   ) {
     return (
       <div
@@ -311,10 +312,5 @@ export default function LightElement(props: LightElementProps) {
     return <SwitchElement entity={entity} state={state as IState<SwitchAttributes>} refetch={refetch} />;
   }
 
-  if (supportedColorModes?.includes(ColorModeEnum.BRIGHTNESS)) {
-    return <div>TODO: implement</div>;
-  }
-
-  // TODO: Implement colour temp, hs
   return <div>{`Color mode ${supportedColorModes} not supported`}</div>;
 }

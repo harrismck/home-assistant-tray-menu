@@ -7,6 +7,7 @@ import SwitchElement from './elements/switch-element';
 import LightElement from './elements/light-element';
 import SensorElement from './elements/sensor-element';
 import SelectElement from './elements/select-element';
+import NumberElement from './elements/number-element';
 import ThermostatElement from './elements/thermostat-element';
 import InputBooleanElement from './elements/input-boolean-element';
 import InputSelectElement from './elements/input-select-element';
@@ -115,6 +116,17 @@ export default function Configuration(props: ConfigurationProps) {
           if (EntityUtils.isSelectType(state)) {
             return (
               <SelectElement
+                key={entity.entity_id}
+                state={state}
+                entity={entity}
+                refetch={refetch}
+              />
+            );
+          }
+
+          if (EntityUtils.isNumberType(state)) {
+            return (
+              <NumberElement
                 key={entity.entity_id}
                 state={state}
                 entity={entity}

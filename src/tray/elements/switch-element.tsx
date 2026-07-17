@@ -30,7 +30,10 @@ export default function SwitchElement(props: SwitchElementProps) {
         },
       ))}
       onClick={async () => {
-        await window.electronAPI.state.callServiceAction('switch', 'toggle', { entity_id: entity.entity_id });
+        // Derive the domain from the entity so on/off lights (routed here from
+        // LightElement) toggle via light.toggle, while real switches use switch.toggle.
+        const [domain] = entity.entity_id.split('.');
+        await window.electronAPI.state.callServiceAction(domain, 'toggle', { entity_id: entity.entity_id });
         await refetch();
       }}
     >

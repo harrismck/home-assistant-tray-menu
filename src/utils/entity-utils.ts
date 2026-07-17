@@ -1,6 +1,6 @@
 import IState, {
-  InputBooleanAttributes, InputSelectAttributes, LightAttributes, SceneAttributes,
-  SelectAttributes, SensorAttributes, SwitchAttributes, ThermostatAttributes,
+  InputBooleanAttributes, InputSelectAttributes, LightAttributes, NumberAttributes,
+  SceneAttributes, SelectAttributes, SensorAttributes, SwitchAttributes, ThermostatAttributes,
 } from '../types/state';
 import { IEntityConfig } from '../store';
 
@@ -41,6 +41,10 @@ export default class EntityUtils {
 
   public static isSelectType(state: IState): state is IState<SelectAttributes> {
     return state.entity_id.startsWith('select.');
+  }
+
+  public static isNumberType(state: IState): state is IState<NumberAttributes> {
+    return state.entity_id.startsWith('number.');
   }
 
   public static isThermostatType(state: IState): state is IState<ThermostatAttributes> {

@@ -39,10 +39,11 @@ export interface SensorAttributes {
 }
 
 export interface NumberAttributes {
-  max: number
-  min: number
-  mode: string
-  step: number
+  max?: number
+  min?: number
+  mode?: string
+  step?: number
+  unit_of_measurement?: string
 }
 
 export interface AutomationAttributes {
