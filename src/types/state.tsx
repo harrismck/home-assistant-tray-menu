@@ -57,6 +57,26 @@ export interface SelectAttributes {
   options: string[]
 }
 
+export interface FanAttributes {
+  percentage?: number | null
+  percentage_step?: number
+  preset_mode?: string | null
+  preset_modes?: string[]
+  oscillating?: boolean
+  direction?: string
+  supported_features?: number
+}
+
+export interface TimerAttributes {
+  duration?: string
+  remaining?: string
+  finishes_at?: string
+}
+
+export interface BinarySensorAttributes {
+  device_class?: string
+}
+
 export interface ThermostatAttributes {
   hvac_mode?: string
   hvac_modes?: string[]
@@ -94,6 +114,9 @@ export type CombinedAttributes =
   | SwitchAttributes
   | AutomationAttributes
   | ThermostatAttributes
+  | FanAttributes
+  | TimerAttributes
+  | BinarySensorAttributes
   | ButtonAttributes
   | InputBooleanAttributes
   | InputSelectAttributes

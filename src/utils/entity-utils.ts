@@ -1,7 +1,7 @@
 import IState, {
-  ButtonAttributes, InputBooleanAttributes, InputSelectAttributes, LightAttributes,
-  NumberAttributes, SceneAttributes, SelectAttributes, SensorAttributes, SwitchAttributes,
-  ThermostatAttributes,
+  BinarySensorAttributes, ButtonAttributes, FanAttributes, InputBooleanAttributes,
+  InputSelectAttributes, LightAttributes, NumberAttributes, SceneAttributes, SelectAttributes,
+  SensorAttributes, SwitchAttributes, ThermostatAttributes, TimerAttributes,
 } from '../types/state';
 import { IEntityConfig } from '../store';
 
@@ -18,6 +18,7 @@ const DOMAIN_ICONS: Record<string, string> = {
   select: 'mdi:format-list-bulleted',
   number: 'mdi:tune-variant',
   fan: 'mdi:fan',
+  timer: 'mdi:timer-outline',
   media_player: 'mdi:cast',
   automation: 'mdi:robot',
   button: 'mdi:gesture-tap-button',
@@ -42,7 +43,20 @@ const DEVICE_CLASS_ICONS: Record<string, string> = {
   illuminance: 'mdi:brightness-5',
   carbon_dioxide: 'mdi:molecule-co2',
   motion: 'mdi:motion-sensor',
+  occupancy: 'mdi:home-account',
+  presence: 'mdi:home-account',
   opening: 'mdi:door',
+  door: 'mdi:door',
+  garage_door: 'mdi:garage',
+  window: 'mdi:window-closed-variant',
+  moisture: 'mdi:water',
+  smoke: 'mdi:smoke-detector',
+  gas: 'mdi:gas-cylinder',
+  connectivity: 'mdi:wifi',
+  lock: 'mdi:lock',
+  problem: 'mdi:alert-circle',
+  vibration: 'mdi:vibrate',
+  sound: 'mdi:ear-hearing',
 };
 
 export default class EntityUtils {
@@ -119,6 +133,18 @@ export default class EntityUtils {
     return state.entity_id.startsWith('button.')
       || state.entity_id.startsWith('input_button.')
       || state.entity_id.startsWith('script.');
+  }
+
+  public static isFanType(state: IState): state is IState<FanAttributes> {
+    return state.entity_id.startsWith('fan.');
+  }
+
+  public static isTimerType(state: IState): state is IState<TimerAttributes> {
+    return state.entity_id.startsWith('timer.');
+  }
+
+  public static isBinarySensorType(state: IState): state is IState<BinarySensorAttributes> {
+    return state.entity_id.startsWith('binary_sensor.');
   }
 
   public static isThermostatType(state: IState): state is IState<ThermostatAttributes> {

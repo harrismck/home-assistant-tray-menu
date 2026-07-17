@@ -37,7 +37,10 @@ export default function Entities() {
             || e.entity_id.startsWith('scene.')
              || e.entity_id.startsWith('button.')
               || e.entity_id.startsWith('input_button.')
-               || e.entity_id.startsWith('script.')),
+               || e.entity_id.startsWith('script.')
+                || e.entity_id.startsWith('fan.')
+                 || e.entity_id.startsWith('timer.')
+                  || e.entity_id.startsWith('binary_sensor.')),
     retry: false,
   });
 

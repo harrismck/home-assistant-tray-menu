@@ -13,6 +13,9 @@ import InputBooleanElement from './elements/input-boolean-element';
 import InputSelectElement from './elements/input-select-element';
 import SceneElement from './elements/scene-element';
 import ButtonElement from './elements/button-element';
+import FanElement from './elements/fan-element';
+import TimerElement from './elements/timer-element';
+import BinarySensorElement from './elements/binary-sensor-element';
 import { IEntityConfig } from '../store';
 
 interface ConfigurationProps {
@@ -70,6 +73,16 @@ export default function Configuration(props: ConfigurationProps) {
           if (EntityUtils.isSensorType(state)) {
             return (
               <SensorElement
+                key={entity.entity_id}
+                state={state}
+                entity={entity}
+              />
+            );
+          }
+
+          if (EntityUtils.isBinarySensorType(state)) {
+            return (
+              <BinarySensorElement
                 key={entity.entity_id}
                 state={state}
                 entity={entity}
@@ -183,6 +196,28 @@ export default function Configuration(props: ConfigurationProps) {
           if (EntityUtils.isTriggerType(state)) {
             return (
               <ButtonElement
+                key={entity.entity_id}
+                state={state}
+                entity={entity}
+                refetch={refetch}
+              />
+            );
+          }
+
+          if (EntityUtils.isFanType(state)) {
+            return (
+              <FanElement
+                key={entity.entity_id}
+                state={state}
+                entity={entity}
+                refetch={refetch}
+              />
+            );
+          }
+
+          if (EntityUtils.isTimerType(state)) {
+            return (
+              <TimerElement
                 key={entity.entity_id}
                 state={state}
                 entity={entity}
