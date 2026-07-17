@@ -82,7 +82,17 @@ export interface SceneAttributes {
   entity_id?: string[]
 }
 
-export type CombinedAttributes = LightAttributes | SensorAttributes | NumberAttributes | SelectAttributes | SwitchAttributes | AutomationAttributes | ThermostatAttributes | InputBooleanAttributes | InputSelectAttributes | SceneAttributes;
+export type CombinedAttributes =
+  | LightAttributes
+  | SensorAttributes
+  | NumberAttributes
+  | SelectAttributes
+  | SwitchAttributes
+  | AutomationAttributes
+  | ThermostatAttributes
+  | InputBooleanAttributes
+  | InputSelectAttributes
+  | SceneAttributes;
 
 export default interface IState<IAttributes extends CombinedAttributes = CombinedAttributes> {
   entity_id: string

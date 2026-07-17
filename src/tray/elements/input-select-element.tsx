@@ -79,4 +79,3 @@ export default function InputSelectElement(props: InputSelectElementProps) {
     </div>
   );
 }
-
