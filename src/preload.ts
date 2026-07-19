@@ -20,6 +20,8 @@ const contextBridgeApi = {
       ipcRenderer.send('reload-api', settings);
       return ipcRenderer.invoke('settings:set', settings);
     },
+    exportSettings: (): Promise<{ canceled: boolean, filePath?: string }> => ipcRenderer.invoke('settings:export'),
+    importSettings: (): Promise<{ canceled: boolean, settings?: SchemaType['settings'] }> => ipcRenderer.invoke('settings:import'),
   },
   getSystemAttributes: (): Promise<SystemAttributes> => ipcRenderer.invoke('system-attributes:get'),
   checkAPIUrl: (apiUrl: string, llat: string): Promise<APIUrlStateEnum> => ipcRenderer.invoke('checkAPIUrl', apiUrl, llat),

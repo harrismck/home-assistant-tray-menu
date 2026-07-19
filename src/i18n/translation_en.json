@@ -26,6 +26,10 @@
     "OPERATING_SYSTEM_THEME": "Operating system theme",
     "OVERWRITE_THEME": "Overwrite theme",
     "TRAY_ICON_COLOR": "Tray icon color",
-    "SHOW_SENSOR_LABELS": "Show sensor labels"
+    "SHOW_SENSOR_LABELS": "Show sensor labels",
+    "BACKUP_TITLE": "Backup & restore",
+    "BACKUP_DESCRIPTION": "Export all settings (entities, connection, preferences) to a file to copy between machines. The file includes your access token! Keep it private.",
+    "EXPORT_SETTINGS": "Export settings",
+    "IMPORT_SETTINGS": "Import settings"
   }
 }

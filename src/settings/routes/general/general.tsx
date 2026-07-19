@@ -3,10 +3,12 @@ import {
   FormContainer, SelectElement, SubmitHandler, SwitchElement, useForm,
 } from 'react-hook-form-mui';
 import React, {
-  useCallback, useEffect, useMemo,
+  useCallback, useEffect, useMemo, useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Typography } from '@mui/material';
+import {
+  Button, Divider, Stack, Typography,
+} from '@mui/material';
 import { useSettings } from '../../../utils/use-settings';
 import { ISettings } from '../../../store';
 import AutoSave from '../../components/form/auto-save';
@@ -16,7 +18,25 @@ export type TFormValues = ISettings['general'];
 export default function General() {
   const { t } = useTranslation('GENERAL');
 
-  const { settings, saveSettings } = useSettings();
+  const { settings, saveSettings, refetchSettings } = useSettings();
+
+  const [importError, setImportError] = useState<string | null>(null);
+
+  const handleExport = useCallback(async () => {
+    await window.electronAPI.store.exportSettings();
+  }, []);
+
+  const handleImport = useCallback(async () => {
+    setImportError(null);
+    try {
+      const result = await window.electronAPI.store.importSettings();
+      if (!result.canceled) {
+        refetchSettings();
+      }
+    } catch (e) {
+      setImportError(e instanceof Error ? e.message : 'Import failed');
+    }
+  }, [refetchSettings]);
 
   const formDefaultValues = useMemo<TFormValues>(() => (settings.general), [settings]);
 
@@ -73,6 +93,21 @@ export default function General() {
 
         <Grid xs={12}>
           <SwitchElement<TFormValues> name="showSensorLabels" label={t('SHOW_SENSOR_LABELS')} />
+        </Grid>
+
+        <Grid xs={12}>
+          <Divider sx={{ my: 1 }} />
+          <Typography variant="h6" gutterBottom>{t('BACKUP_TITLE')}</Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            {t('BACKUP_DESCRIPTION')}
+          </Typography>
+          <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+            <Button variant="outlined" onClick={handleExport}>{t('EXPORT_SETTINGS')}</Button>
+            <Button variant="outlined" onClick={handleImport}>{t('IMPORT_SETTINGS')}</Button>
+          </Stack>
+          {importError && (
+            <Typography variant="body2" color="error" sx={{ mt: 1 }}>{importError}</Typography>
+          )}
         </Grid>
 
         <AutoSave

@@ -1,4 +1,5 @@
-import { ipcMain, systemPreferences } from 'electron';
+import { ipcMain, systemPreferences, dialog } from 'electron';
+import { readFileSync, writeFileSync } from 'fs';
 import { setOsTheme, setAutoLaunch } from './windows/startup';
 import APIUrlStateEnum from './types/api-state-enum';
 import { setIconStatus } from './windows/tray';
@@ -86,6 +87,72 @@ ipcMain.handle('settings:set', async (event, value: ISettings) => {
   setAutoLaunch(settings.isAutoLaunchEnabled);
 
   setIconStatus(APIUrlStateEnum.ok);
+});
+
+// Apply an imported/updated settings object across the running app.
+const applySettings = (settings: ISettings) => {
+  store.set('settings', settings);
+  setAxiosParameters(settings);
+  setOsTheme(settings.general.theme);
+  setAutoLaunch(settings.isAutoLaunchEnabled);
+  setIconStatus(APIUrlStateEnum.ok);
+};
+
+ipcMain.handle('settings:export', async () => {
+  const { canceled, filePath } = await dialog.showSaveDialog({
+    title: 'Export settings',
+    defaultPath: 'home-assistant-tray-menu-settings.json',
+    filters: [{ name: 'JSON', extensions: ['json'] }],
+  });
+
+  if (canceled || !filePath) {
+    return { canceled: true };
+  }
+
+  writeFileSync(filePath, JSON.stringify(store.get('settings'), null, 2), 'utf-8');
+  return { canceled: false, filePath };
+});
+
+ipcMain.handle('settings:import', async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    title: 'Import settings',
+    filters: [{ name: 'JSON', extensions: ['json'] }],
+    properties: ['openFile'],
+  });
+
+  if (canceled || filePaths.length === 0) {
+    return { canceled: true };
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(readFileSync(filePaths[0], 'utf-8'));
+  } catch {
+    throw new Error('The selected file is not valid JSON.');
+  }
+
+  // Sanity-check the shape before trusting it.
+  const candidate = parsed as Partial<ISettings>;
+  if (
+    typeof candidate !== 'object'
+    || candidate === null
+    || typeof candidate.hassApiUrl !== 'string'
+    || !Array.isArray(candidate.entities)
+  ) {
+    throw new Error('The selected file is not a valid settings export.');
+  }
+
+  // Merge onto current settings so any keys missing from an older export keep their defaults.
+  const current = store.get('settings');
+  const merged: ISettings = {
+    ...current,
+    ...candidate,
+    general: { ...current.general, ...candidate.general },
+    development: { ...current.development, ...candidate.development },
+  } as ISettings;
+
+  applySettings(merged);
+  return { canceled: false, settings: merged };
 });
 
 export interface SystemAttributes {

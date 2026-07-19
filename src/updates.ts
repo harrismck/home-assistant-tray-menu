@@ -12,7 +12,7 @@ export default async function checkForUpdates(): Promise<IRelease | null> {
   if (!app.isPackaged) return null;
 
   try {
-    const { data: releases } = await axios.get<IRelease[]>('https://api.github.com/repos/pascalluginbuehl/home-assistant-tray-menu/releases');
+    const { data: releases } = await axios.get<IRelease[]>('https://api.github.com/repos/harrismck/home-assistant-tray-menu/releases');
     const latestVersion = releases.filter((release) => !release.prerelease)[0];
 
     if (`v${app.getVersion()}` !== latestVersion.tag_name) {

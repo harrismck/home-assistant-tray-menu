@@ -15,7 +15,7 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      iconUrl: "https://raw.githubusercontent.com/pascalluginbuehl/home-assistant-tray-menu/main/assets/home-assistant-icon-pretty.ico",
+      iconUrl: "https://raw.githubusercontent.com/harrismck/home-assistant-tray-menu/main/assets/home-assistant-icon-pretty.ico",
       setupIcon: path.resolve(__dirname, "./assets/home-assistant-icon-pretty.ico"),
     }),
     new MakerZIP({}, ['darwin']),
@@ -53,7 +53,7 @@ const config: ForgeConfig = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'pascalluginbuehl',
+          owner: 'harrismck',
           name: 'home-assistant-tray-menu',
         },
         prerelease: true,

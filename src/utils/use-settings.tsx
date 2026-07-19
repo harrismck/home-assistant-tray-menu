@@ -10,6 +10,7 @@ interface ISettingsContext {
   settings: ISettings
   apiURLState: APIUrlStateEnum | undefined
   refetchAPIUrlState: () => void
+  refetchSettings: () => void
   saveSettings: (settings: Partial<ISettings>) => Promise<void>
   systemAttributes: {
     computedOsTheme: 'win10' | 'win11'
@@ -69,10 +70,11 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       apiURLState,
       settings,
       refetchAPIUrlState,
+      refetchSettings,
       saveSettings,
       systemAttributes,
     };
-  }, [apiURLState, settings, refetchAPIUrlState, saveSettings, systemAttributes]);
+  }, [apiURLState, settings, refetchAPIUrlState, refetchSettings, saveSettings, systemAttributes]);
 
   if (value === null) {
     return (

@@ -1,10 +1,10 @@
 {
   "name": "home-assistant-tray-menu",
   "productName": "Home Assistant Tray Menu",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Home Assistant Tray App for Windows Quick Actions",
   "main": ".webpack/main",
-  "repository": "github:pascalluginbuehl/home-assistant-tray-menu",
+  "repository": "github:harrismck/home-assistant-tray-menu",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -91,6 +91,6 @@
     "yup": "^1.2.0"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --max-warnings=0"
+    "src/**/*.{js,jsx,ts,tsx}": "eslint --cache --max-warnings=0"
   }
 }
